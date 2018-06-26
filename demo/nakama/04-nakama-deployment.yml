@@ -1,0 +1,59 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: conference
+  name: nakama
+  labels:
+    deployment: nakama
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: nakama
+  template:
+    metadata:
+      labels:
+        app: nakama
+    spec:
+      containers:
+        - image: heroiclabs/nakama
+          name: nakama
+          imagePullPolicy: IfNotPresent
+          command:
+          - "/bin/sh"
+          - "-ecx"
+          - >
+            ./nakama migrate up --database.address $(DATABASE_ADDRESS) && exec ./nakama
+            --name $HOSTNAME
+            --database.address $(DATABASE_ADDRESS)
+          env:
+            - name: "DATABASE_ADDRESS"
+              value: "root@database:26257"
+          ports:
+            - containerPort: 7350
+              name: nakama-api
+          resources:
+            requests:
+              memory: "512Mi"
+            limits:
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 7350
+            initialDelaySeconds: 20
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 7350
+            initialDelaySeconds: 20
+            periodSeconds: 3
+  updateStrategy:
+    type: RollingUpdate
