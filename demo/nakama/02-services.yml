@@ -27,7 +27,7 @@ metadata:
 spec:
   selector:
     app: nakama
-  type: NodePort
+  type: LoadBalancer
   ports:
   - port: 7350
     targetPort: 7350

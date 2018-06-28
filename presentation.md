@@ -267,7 +267,7 @@ nodeSelector:
 - Use `affinity` and `anti-affinity` to indicate soft/hard requirement for node attractiveness
 - Use `taint` and `tolerations` to repel pods from nodes
 - Use both to schedule pods only on nodes with special hardware
-- Ensure to use resource `requests` and `limits` for pods to limit noisy neighbour problem.
+- Ensure to use resource `requests` and `limits` for pods to limit noisey neighbour problems.
 
 ---
 ![original](images/bg.jpg)
@@ -361,13 +361,54 @@ spec:
 ![inline 90%](images/nakama-kube-services.jpg)
 
 ---
-
 ![original](images/bg.jpg)
 
 # Unity headless server
+
+```sh
+/Applications/Unity/Unity.app/Contents/MacOS/Unity -quit -batchmode -nographics \
+  -logFile .unity-build.log \
+  -projectPath $(pwd)/unity-fastpacedmultiplayer \
+  -executeMethod BuildTools.QuickBuildLinux
+```
+
+```csharp
+public static void QuickBuildLinux()
+{
+    BuildPlayerOptions opts = new BuildPlayerOptions
+    {
+        options = BuildOptions.Development & BuildOptions.EnableHeadlessMode,
+        locationPathName = "/Users/mo/Desktop/server",
+        target = BuildTarget.StandaloneLinux64
+    };
+
+    BuildPipeline.BuildPlayer(opts);
+}
+```
 
 ---
 
 ![original](images/bg.jpg)
 
 # Unity headless server
+
+```yml, [.highlight: 6, 8, 15, 17]
+metadata:
+  generateName: "unity-"
+  labels:
+    app: unity-server
+spec:
+  hostNetwork: true
+  containers:
+    - image: mofirouz/unity-fastpacedmultiplayer:0.0.1
+      name: unity-server
+      imagePullPolicy: Always
+      command:
+      - "/bin/sh"
+      - "-ecx"
+      - >
+        exec ./server -logFile /dev/stdout
+      ports:
+        - containerPort: 7777
+          name: server-api
+```

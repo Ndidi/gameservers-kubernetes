@@ -29,9 +29,8 @@ spec:
           - "/bin/sh"
           - "-ecx"
           - >
-            ./nakama migrate up --database.address $(DATABASE_ADDRESS) && exec ./nakama
-            --name $HOSTNAME
-            --database.address $(DATABASE_ADDRESS)
+            ./nakama migrate up --database.address $(DATABASE_ADDRESS) &&
+            exec ./nakama --database.address $(DATABASE_ADDRESS)
           env:
             - name: "DATABASE_ADDRESS"
               value: "root@database:26257"
@@ -55,5 +54,3 @@ spec:
               port: 7350
             initialDelaySeconds: 20
             periodSeconds: 3
-  updateStrategy:
-    type: RollingUpdate

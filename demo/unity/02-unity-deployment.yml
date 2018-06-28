@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  namespace: conference-unity
+  name: unity-server
+  labels:
+    deployment: unity-server
+spec:
+  replicas: 1
+  revisionHistoryLimit: 0
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: unity-server
+  template:
+    metadata:
+      generateName: "unity-"
+      labels:
+        app: unity-server
+    spec:
+      hostNetwork: true
+      containers:
+        - image: mofirouz/unity-fastpacedmultiplayer:0.0.1
+          name: unity-server
+          imagePullPolicy: Always
+          command:
+          - "/bin/sh"
+          - "-ecx"
+          - >
+            exec ./server -logFile /dev/stdout
+          ports:
+            - containerPort: 7777
+              name: server-api
+          resources:
+            requests:
+              memory: "512Mi"
+            limits:
+              memory: "512Mi"
