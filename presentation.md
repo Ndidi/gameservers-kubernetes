@@ -6,6 +6,11 @@
 ---
 ![original](images/bg.jpg)
 
+^ Background is working in high-frequency trading system, and big data analytics.
+Core infrastructure with focus on
+streaming technologies
+and highly scalable distributed systems.
+
 # About me
 - My name is Mo(hammad) Firouz!
 - Originally Iranian - can speak Farsi with a funny accent.
@@ -18,17 +23,23 @@
 
 # Heroic Labs
 
+^ Just released v2
+Written in Go, single binary
+Platform agnostic, deploy-anywhere
+Unity, JS, Coco2dx, Unreal, Android, iOS, Corono, Defold
+Presence system, Virtual wallet, Leaderboard, Data storage, Tournaments
+RESTful and WebSocket / rUDP
+
 ![right 50%](images/nakama-logo.png)
 
 - Nakama, a realtime and social server for games.
-
+- Completely open-source (and free!):
+[https://github.com/heroiclabs/nakama](https://github.com/heroiclabs/nakama)
+<br />
 - Realtime, server-authoritative multiplayer
 - Flexible matchmaking system
 - Extendable using Lua scripting
 - Friends, Clans, Chat + more
-<br />
-- Completely open-source (and free!):
-[https://github.com/heroiclabs/nakama](https://github.com/heroiclabs/nakama)
 
 ---
 ![original](images/bg.jpg)
@@ -48,7 +59,13 @@
 
 ^ Show of hands how many people heard-of/have used Kubernetes before?
 
-^ Imperative and Declarative management
+^Originally designed by Google and now maintained by the Cloud Native Computing Foundation
+
+^Different ways: Yaml, API, Kubectl
+Restart failed processes
+Standarize cloud provider access
+Azure, AWS, GCP, Vsphere, Openstack
+Imperative and Declarative management
 
 > _System for automating deployment, scaling, and management of **containerized** applications_
 
@@ -60,6 +77,11 @@
 ![original](images/bg.jpg)
 
 # Intro to Kubernetes
+
+^ daemon worker pick up logs from stdout
+Preferably use standard logging format
+Add resource request/limit to allow autoscaling
+Handle graceful restart/time
 
 Some rules to follow:
 
@@ -74,12 +96,21 @@ Some rules to follow:
 
 # Intro to Kubernetes
 
+^ Many other components:
+Namespaces (multiple teams)
+Cron/Jobs
+DaemonSet
+NetworkPolicy
+Storage / PersistentVolumeClaim
+PodDisruptionBudget
+ServiceAccount / Roles
+
 Kubernetes components
 
 1. Pod
 2. Controllers
 3. Service + Ingress
-4. Nodepools
+4. Nodes
 5. Autoscaling
 
 ---
@@ -87,16 +118,36 @@ Kubernetes components
 
 # Pod
 
+^ Recommend one application per pod
+Smallest kubernetes component
+Supposed to be created/destroyed anytime
+
+^ Like a Russian doll:
+Multiple containers in a pod
+Multiple pods on a single node
+
+^ Sidecar containers:
+Access same network, interact between containers
+
 ![right 85%](images/pods.png)
 
 - Wrap one or more containers
 - Pods are ephemeral
   - can be dynamically created / deleted
-- Unique network IP (but not permanent)
+- Unique network cluster-IP (but not permanent)
 - Storage resource(s)
 
 ---
 ![original](images/bg.jpg)
+
+^ Example application here, Nakama.
+
+^^ Labels are KV "selectors".
+
+^ Mounting empty directory
+Isolated folder on the host machine
+
+^ Expose port 7350
 
 # Pod
 
@@ -125,6 +176,12 @@ containers:
 ---
 ![original](images/bg.jpg)
 
+^ Ways to access pods:
+Services
+Ingress
+HostNetwork
+HostPort
+
 # Service
 
 - A way to access pods
@@ -145,6 +202,14 @@ containers:
 
 ---
 ![original](images/bg.jpg)
+
+^ Default mode is ClusterIP
+If a clusterIP is set to "none" -> "headless service"
+clusterIP: none -> No load balancing
+Good if service-discovery is built-into application
+
+^ With selector, DNS endpoints are setup
+Otherwise cluster-internal CNAME and A-record are configured
 
 # Service
 
@@ -178,6 +243,11 @@ spec:
 ---
 ![original](images/bg.jpg)
 
+^ A Secret is an object that contains a small amount of sensitive data.
+
+^ To use a secret, a pod needs to reference the secret.
+Or as a file in a volume mounted.
+
 # Ingress
 
 ```yml
@@ -202,7 +272,19 @@ spec:
 
 ![original](images/bg.jpg)
 
+^ ReplicaSet -> ReplicationController -> Deployment
+
+^ StatefulSet
+DaemonSet
+Job
+
 # Controllers
+
+^ Pod lifecycle (5):
+Pending, Running, Succeeded (finished), Failed, Unknown
+
+^ Pod status (5):
+PodScheduled, Initialized, ContainersReady, Ready, Unschedulable
 
 - Replicating homogeneous set of pods
 - Ensures healthy pods are running
@@ -215,6 +297,8 @@ spec:
 ---
 ![original](images/bg.jpg)
 
+^ Way to manage databases, or queues
+
 # Controller
 
 - StatefulSet:
@@ -226,6 +310,8 @@ spec:
 
 ---
 ![original](images/bg.jpg)
+
+^ if app is similar to RabbitMQ ram-backed queue, then use Parallel
 
 # Controller
 
@@ -255,7 +341,11 @@ spec:
 [.autoscale: true]
 ![original](images/bg.jpg)
 
-# Node Pool
+# Nodes
+
+^ Ways to isolate pods from nodes:
+- Setup separate pools
+- taint / toleration
 
 - Assign special pods to special nodes
 
@@ -272,7 +362,10 @@ nodeSelector:
 ---
 ![original](images/bg.jpg)
 
-# Node Pool
+^ This is soft / not required
+node with greatest sum of weights is selected
+
+# Nodes
 
 ```yml
 affinity:
@@ -291,6 +384,9 @@ affinity:
 
 ---
 ![original](images/bg.jpg)
+
+^ Make sure that you've setup resource requests/limits
+And setup node taints or selectors to avoid co-location
 
 # Autoscaling
 
@@ -318,6 +414,10 @@ spec:
 ---
 ![original](images/bg.jpg)
 
+^^ Ingress sends request directly to pod
+Gets pod IP from service
+Autoscaler updates service automatically
+
 # System overview
 
 ![inline 100%](images/system-overview.png)
@@ -325,6 +425,8 @@ spec:
 ---
 [.autoscale: true]
 ![original](images/bg.jpg)
+
+^ Nakama depends on a database to store info
 
 # Nakama game server
 
@@ -347,6 +449,8 @@ spec:
 
 ---
 ![original](images/bg.jpg)
+
+^ Nakama NodePort
 
 # Nakama game server
 
@@ -412,3 +516,26 @@ spec:
         - containerPort: 7777
           name: server-api
 ```
+
+---
+
+![original](images/bg.jpg)
+
+^ Demo?
+Minikube
+Weavescope
+
+# <br />
+
+Feel free to send questions;
+
+> email: [mo@heroiclabs.com](mailto:mo@heroiclabs.com)
+<br />
+> twitter: [@mofirouz](https://twitter.com/mofirouz)
+<br />
+> skype: mo.firouz
+
+Talk available on GitHub:
+[https://github.com/mofirouz/gameservers-kubernetes](https://github.com/mofirouz/gameservers-kubernetes)
+
+

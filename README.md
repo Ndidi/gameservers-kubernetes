@@ -13,4 +13,19 @@ The talk uses [this multiplayer project](https://github.com/JoaoBorks/unity-fast
 
 The presentation can be compiled using the [Deckset](https://www.decksetapp.com) app.
 
+To run the demo, you'll need:
+
+1. Install Minikube (or full Kubernetes)
+2. Install [Weavescope](https://www.weave.works/docs/scope/latest/installing/#k8s):
+
+```
+kubectl apply -f "https://cloud.weave.works/k8s/scope.yaml?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
+
+3. Port-forward weavescope:
+
+```
+kubectl port-forward -n weave "$(kubectl get -n weave pod --selector=weave-scope-component=app -o jsonpath='{.items..metadata.name}')" 4040
+```
+
 All content and material is released under MIT Licence and can be used freely for any purpose.
