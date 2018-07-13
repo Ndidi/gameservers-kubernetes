@@ -6,10 +6,8 @@
 ---
 ![original](images/bg.jpg)
 
-^ Background is working in high-frequency trading system, and big data analytics.
-Core infrastructure with focus on
-streaming technologies
-and highly scalable distributed systems.
+^ Background is building core infrastructure systems with focus on
+streaming technologies and highly scalable distributed systems.
 
 # About me
 - My name is Mo(hammad) Firouz!
@@ -142,7 +140,7 @@ Access same network, interact between containers
 
 ^ Example application here, Nakama.
 
-^^ Labels are KV "selectors".
+^ Labels are KV "selectors".
 
 ^ Mounting empty directory
 Isolated folder on the host machine
